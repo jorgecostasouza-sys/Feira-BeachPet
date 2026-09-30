@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: #FDF8F0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    h1 {
+      color: #1A4B6E;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #4A90B8;
+      font-size: 1rem;
+      margin-bottom: 32px;
+    }
+
+    label {
+      display: block;
+      color: #2C3E50;
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #A8D0E6;
+      border-radius: 12px;
+      font-size: 1rem;
+      color: #2C3E50;
+      background: white;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 20px;
+    }
+
+    input::placeholder {
+      color: #A0B4C8;
+    }
+
+    input:focus {
+      border-color: #4A90B8;
+    }
+
+    .btn-entrar {
+      width: 100%;
+      padding: 16px;
+      background: #F5D76E;
+      border: none;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #5A4A20;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-bottom: 28px;
+    }
+
+    .btn-entrar:hover {
+      background: #F0C84A;
+    }
+
+    .btn-entrar:active {
+      transform: scale(0.98);
+    }
+
+    /* Caixa de usuários de teste */
+    .test-users {
+      background: #F8F4EB;
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .test-users-left {
+      font-size: 0.9rem;
+      color: #4A5568;
+      line-height: 1.6;
+    }
+
+    .test-users-left strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #2D3748;
+    }
+
+    .test-users-right {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .role-admin {
+      color: #D69E2E;
+    }
+
+    .role-operador {
+      color: #3182CE;
+    }
+
+    /* Cards de permissões */
+    .roles-container {
+      display: flex;
+      gap: 12px;
+    }
+
+    .role-card {
+      flex: 1;
+      border-radius: 14px;
+      padding: 14px 12px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+    }
+
+    .role-card.admin {
+      background: #FEF9E7;
+      color: #744210;
+    }
+
+    .role-card.operador {
+      background: #EBF8FF;
+      color: #2B6CB0;
+    }
+
+    .role-card strong {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    .help-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: white;
+      border: 1.5px solid #CBD5E0;
+      color: #4A5568;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .help-btn:hover {
+      background: #F7FAFC;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h1>Bem-vindo!</h1>
+    <p class="subtitle">Faça login para continuar</p>
+
+    <form>
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" placeholder="Digite seu usuário" autocomplete="username">
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Digite sua senha" value="••••••••" autocomplete="current-password">
+
+      <button type="submit" class="btn-entrar">Entrar →</button>
+    </form>
+
+    <!-- Usuários de teste -->
+    <div class="test-users">
+      <div class="test-users-left">
+        <strong>Usuários de teste:</strong>
+        admin / admin123<br>
+        caixa / caixa123
+      </div>
+      <div class="test-users-right">
+        <span class="role-admin">★ Admin</span>
+        <span class="role-operador">👤 Operador</span>
+      </div>
+    </div>
+
+    <!-- Cards de permissões -->
+    <div class="roles-container">
+      <div class="role-card admin">
+        <strong>★ Administrador</strong>
+        Acesso total: estoque, relatórios, usuários
+      </div>
+      <div class="role-card operador">
+        <strong>👤 Operador</strong>
+        PDV e consulta de produtos
+      </div>
+    </div>
+  </div>
+
+  <button class="help-btn" title="Ajuda">?</button>
+</body>
+</html>
+
+
+
+
+
