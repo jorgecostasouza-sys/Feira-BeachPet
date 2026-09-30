@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeachPet Estoque</title>
+</head>
+  <h3>BeachPet</h3>
+  <h6>Loja Praiana</h6>
+  <button>🏠Painel</button> 
+  <button>📦Estoque</button> 
+  <button>🛒Caixa</button> 
+  Ana Souza 🌟Admin
+  <button>Sair</button>
+<body>
+  <h1>📦Estoque</h1>
+  <h4>12 Produtos</h4>
+  <button style="float: right;">Novo Produto</button>
+  <label for= "categoria">Buscar produto, código ou categoria</label>
+  <input type="text">
+  <br><button>Todas</button>
+  <button>Bebidas</button>
+  <button>Drinks</button>
+  <button>Sorvetes</button>
+  <button>Comidas</button>
+  <button>Salgados</button>
+  <button>Lembranças</button>
+  <button>Pet</button>
+  <section>
+  <p>Total de SKUs: <b>12</b></p>
+  <p>Itens em estoque: <b>352</b></p>
+  <p>Estoque baixo (<15): <b>2</b></p>
+  <p>Valor total(custo): <b>R$ 3,643.00</b></p></section>
+  <table border="1" cellpadding="5" cellspacing="0" bordercolor="black">
+    <tr>
+      <th>Produto</th>
+      <th>Código</th>
+      <th>Categoria</th>
+      <th>Preço</th>
+      <th>Estoque</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+    <tr>
+      <td>🥥Água de coco</td>
+      <td>1001</td>
+      <td>Bebidas</td>
+      <td>R$ 8,00</td>
+      <td>42</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🍉Suco de melancia</td>
+      <td>1002</td>
+      <td>Bebidas</td>
+      <td>R$ 10,00</td>
+      <td>28</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🍹Caipirinha Tropical</td>
+      <td>1003</td>
+      <td>Drinks</td>
+      <td>R$ 18,00</td>
+      <td>35</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🍦Picolé de manga</td>
+      <td>1004</td>
+      <td>Sorvetes</td>
+      <td>R$ 6,00</td>
+      <td>60</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🫐Açaí na Tigela</td>
+      <td>1005</td>
+      <td>Comidas</td>
+      <td>R$ 15,00</td>
+      <td>20</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🍢Espetinho de Frango</td>
+      <td>1006</td>
+      <td>Comidas</td>
+      <td>R$ 12,00</td>
+      <td>18</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🫘Chips de mandioca</td>
+      <td>1007</td>
+      <td>Salgados</td>
+      <td>R$ 7,00</td>
+      <td>55</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🧢Boné Praiano</td>
+      <td>1008</td>
+      <td>Lembranças</td>
+      <td>R$ 25,00</td>
+      <td>14</td>
+      <td>baixo</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🐚Imã de geladeira</td>
+      <td>1009</td>
+      <td>Lembranças</td>
+      <td>R$ 9,00</td>
+      <td>30</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🦴Biscoito Pet</td>
+      <td>1010</td>
+      <td>Pet</td>
+      <td>R$ 11,00</td>
+      <td>22</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>🐾Picolé de Fruta Pet</td>
+      <td>1011</td>
+      <td>Pet</td>
+      <td>R$ 8,00</td>
+      <td>18</td>
+      <td>ok</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+    <tr>
+      <td>❄️Petisco Congelado Pet</td>
+      <td>1012</td>
+      <td>Pet</td>
+      <td>R$ 13,00</td>
+      <td>10</td>
+      <td>baixo</td>
+      
+      <td><button>Editar</button><button>Excluir</button></td>
+    </tr>
+
+
+</body>
+</html>
+

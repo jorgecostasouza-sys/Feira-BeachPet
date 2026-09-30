@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeachPet Web - Caixa POS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        headerTeal: '#003847',
+                        headerHover: '#002B37',
+                        bgCream: '#FAF5EE',
+                        cardBg: '#FFFFFF',
+                        brandOrange: '#FF5A1F',
+                        activeYellow: '#FFC83B',
+                        activeYellowHover: '#E0AE2C',
+                        softTeal: '#E0F2F1',
+                        accentBlue: '#007791',
+                        textDark: '#1E293B',
+                        textMuted: '#64748B'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom styles for exact layout control */
+        body {
+            background-color: #FAF5EE;
+            font-family: 'Inter', sans-serif;
+            color: #1E293B;
+            user-select: none;
+        }
+
+        /* Logo tight typography rules */
+        .logo-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #FFFFFF;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.1 !important;
+            letter-spacing: -0.01em;
+        }
+
+        .logo-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.72rem;
+            color: #79D2E6;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.0 !important;
+        }
+
+        /* Price text styling matching image */
+        .price-text {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            color: #FF5A1F;
+        }
+
+        /* Custom scrollbar for cart and products */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 56, 71, 0.2);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 56, 71, 0.4);
+        }
+
+        /* Animated badge pulsing effect */
+        @keyframes subtlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .active-tab {
+            animation: subtlePulse 3s infinite ease-in-out;
+        }
+
+        /* Modal backdrop transition */
+        .modal-blur {
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-bgCream antialiased text-textDark">
+
+    <!-- HEADER -->
+    <header class="bg-headerTeal text-white px-4 lg:px-6 py-2.5 shadow-md sticky top-0 z-30">
+        <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Left Logo & Branding -->
+            <div class="flex items-center space-x-3 cursor-pointer select-none" onclick="resetFilters()">
+                <!-- Circle Wave / Pet Logo Icon -->
+                <div class="w-10 h-10 rounded-full bg-activeYellow flex items-center justify-center shadow-inner relative overflow-hidden flex-shrink-0">
+                    <!-- SVG Beach Wave + Paw outline -->
+                    <svg class="w-7 h-7 text-headerTeal" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5c-2.49 0-4.5-1.79-4.5-4 0-1.18.58-2.25 1.5-3 .25 1.75 1.75 3 3.5 3s3.25-1.25 3.5-3c.92.75 1.5 1.82 1.5 3 0 2.21-2.01 4-4.5 4zm-3-7.5c-.83 0-1.5-.67-1.5-1.5S7.17 6 8 6s1.5.67 1.5 1.5S8.83 9 8 9zm8 0c-.83 0-1.5-.67-1.5-1.5S15.17 6 16 6s1.5.67 1.5 1.5S16.83 9 16 9z"/>
+                    </svg>
+                </div>
+                
+                <!-- Tight Brand Heading Stack -->
+                <div class="flex flex-col justify-center">
+                    <h3 class="logo-title">Beach Pet</h3>
+                    <h4 class="logo-subtitle">Loja Praiana</h4>
+                </div>
+            </div>
+
+            <!-- Middle Navigation Buttons -->
+            <nav class="flex items-center space-x-2">
+                <button class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-300/70 cursor-default opacity-80" title="Módulo reservado para os integrantes da equipe">
+                    <i class="fa-solid fa-house text-xs"></i>
+                    <span>Painel</span>
+                </button>
+                <button class="flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium text-slate-300/70 cursor-default opacity-80" title="Módulo reservado para os integrantes da equipe">
+                    <i class="fa-solid fa-box text-xs"></i>
+                    <span>Estoque</span>
+                </button>
+                <!-- Active POS Tab -->
+                <button class="active-tab flex items-center space-x-2 px-5 py-2 rounded-xl text-sm font-semibold bg-activeYellow text-headerTeal shadow-md hover:bg-activeYellowHover transition">
+                    <i class="fa-solid fa-cart-shopping text-xs"></i>
+                    <span>Caixa</span>
+                </button>
+            </nav>
+
+            <!-- Right User Profile & Exit -->
+            <div class="flex items-center space-x-3">
+                <div class="text-right hidden sm:block">
+                    <div class="text-xs font-semibold text-white">Ana Souza</div>
+                    <div class="inline-flex items-center space-x-1 text-[10px] font-bold text-activeYellow">
+                        <i class="fa-solid fa-star"></i>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <button onclick="openModal('sair')" class="bg-white/15 hover:bg-white/25 text-white text-xs font-medium px-3.5 py-2 rounded-xl transition flex items-center space-x-1.5">
+                    <span>Sair</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="max-w-[1600px] mx-auto w-full p-4 lg:p-6 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT COLUMN: PRODUCTS & SEARCH (8 Cols on desktop) -->
+        <section class="lg:col-span-8 flex flex-col space-y-5">
+            
+            <!-- Search Input Bar -->
+            <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    oninput="handleSearch()"
+                    placeholder="Buscar produto ou código de barras..." 
+                    class="w-full pl-11 pr-10 py-3.5 bg-white border border-slate-200 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-headerTeal focus:border-transparent text-sm placeholder-slate-400 transition"
+                >
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="flex items-center space-x-2 overflow-x-auto pb-1 no-scrollbar text-sm" id="categoryPills">
+                <!-- Javascript rendered pills -->
+            </div>
+
+            <!-- Products Grid -->
+            <div id="productGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 flex-1 items-start">
+                <!-- Javascript will populate cards here -->
+            </div>
+
+            <!-- Empty Search Results State -->
+            <div id="emptySearch" class="hidden flex-col items-center justify-center py-16 text-center text-slate-400">
+                <i class="fa-solid fa-box-open text-4xl mb-3 text-slate-300"></i>
+                <p class="font-medium text-slate-600">Nenhum produto encontrado</p>
+                <p class="text-xs text-slate-400 mt-1">Tente pesquisar outro termo ou selecione outra categoria</p>
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT COLUMN: SHOPPING CART (4 Cols on desktop) -->
+        <section class="lg:col-span-4 flex flex-col">
+            
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-full sticky top-20">
+                
+                <!-- Cart Dark Teal Top Header -->
+                <div class="bg-headerTeal px-5 py-4 text-white flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <i class="fa-solid fa-cart-shopping text-activeYellow text-lg"></i>
+                        <h2 class="font-display font-bold text-lg">Carrinho</h2>
+                    </div>
+                    <span id="cartCountBadge" class="text-xs text-cyan-200 font-medium">0 itens</span>
+                </div>
+
+                <!-- Cart Items Scrollable List -->
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-4 min-h-[260px] max-h-[420px] flex flex-col justify-between">
+                    
+                    <!-- Empty Cart State -->
+                    <div id="emptyCartState" class="flex flex-col items-center justify-center my-auto py-12 text-center text-slate-400">
+                        <div class="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center mb-3">
+                            <!-- Shopping Cart SVG / Icon -->
+                            <svg class="w-8 h-8 text-cyan-700/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 0a2 2 0 100 4 2 2 0 000-4z"/>
+                            </svg>
+                        </div>
+                        <p class="text-sm font-medium text-slate-500">Nenhum item adicionado</p>
+                        <p class="text-xs text-slate-400 mt-1">Clique nos produtos para inserir no carrinho</p>
+                    </div>
+
+                    <!-- Populated Items List -->
+                    <div id="cartList" class="space-y-3 hidden">
+                        <!-- Items rendered by JS -->
+                    </div>
+
+                </div>
+
+                <!-- Cart Footer: Totals, Discounts, Payment & Finalize -->
+                <div class="bg-slate-50 border-t border-slate-200 p-4 space-y-4">
+                    
+                    <!-- Discount Row -->
+                    <div class="flex items-center justify-between text-sm">
+                        <label for="discountInput" class="text-slate-600 font-medium flex items-center space-x-1">
+                            <span>Desconto R$</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="discountInput" 
+                            min="0" 
+                            step="0.50" 
+                            value="0" 
+                            oninput="updateCartTotals()"
+                            class="w-24 px-3 py-1.5 text-right bg-white border border-slate-200 rounded-lg text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-headerTeal"
+                        >
+                    </div>
+
+                    <!-- Subtotal & Total Display -->
+                    <div class="space-y-1.5 border-t border-slate-200 pt-3">
+                        <div class="flex justify-between text-xs text-slate-500">
+                            <span>Subtotal</span>
+                            <span id="subtotalVal" class="font-semibold text-slate-700">R$ 0.00</span>
+                        </div>
+                        
+                        <div class="flex justify-between items-baseline pt-1">
+                            <span class="font-display font-bold text-slate-800 text-base">Total</span>
+                            <span id="totalVal" class="font-display font-extrabold text-2xl text-headerTeal">R$ 0.00</span>
+                        </div>
+
+                        <!-- 5% NGO Donation Banner -->
+                        <div class="flex justify-between items-center text-xs text-teal-700 font-medium bg-teal-50 border border-teal-100 rounded-lg px-2.5 py-1.5 mt-2">
+                            <span class="flex items-center space-x-1">
+                                <span>🐾 Doação ONGs (5%)</span>
+                            </span>
+                            <span id="ngoVal" class="font-bold">R$ 0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Payment Options Grid (4 buttons) -->
+                    <div class="space-y-1.5 pt-1">
+                        <span class="text-xs font-semibold text-slate-600">Pagamento</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="selectPayment('dinheiro')" id="pay-dinheiro" class="pay-btn flex items-center justify-center space-x-1.5 py-2 px-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">
+                                <span>💵 Dinheiro</span>
+                            </button>
+                            <button onclick="selectPayment('pix')" id="pay-pix" class="pay-btn flex items-center justify-center space-x-1.5 py-2 px-2 bg-headerTeal border border-headerTeal text-white rounded-xl text-xs font-semibold shadow-xs">
+                                <span>📱 Pix</span>
+                            </button>
+                            <button onclick="selectPayment('debito')" id="pay-debito" class="pay-btn flex items-center justify-center space-x-1.5 py-2 px-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">
+                                <span>💳 Débito</span>
+                            </button>
+                            <button onclick="selectPayment('credito')" id="pay-credito" class="pay-btn flex items-center justify-center space-x-1.5 py-2 px-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition">
+                                <span>💳 Crédito</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Finalize Sale Button -->
+                    <button 
+                        id="finalizeBtn" 
+                        onclick="finalizeSale()" 
+                        disabled
+                        class="w-full py-3 px-4 bg-activeYellow opacity-50 cursor-not-allowed hover:bg-activeYellowHover text-headerTeal font-display font-bold text-sm rounded-xl transition flex items-center justify-center space-x-2 shadow-sm"
+                    >
+                        <i class="fa-solid fa-check-double"></i>
+                        <span>Finalizar Venda</span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer Cookies disclaimer bar from screenshot -->
+    <footer class="p-3 text-left max-w-[1600px] mx-auto w-full">
+        <span class="inline-block bg-slate-200/80 text-slate-600 text-[11px] px-3 py-1 rounded-md font-medium">
+            Gerenciar cookies ou desativar
+        </span>
+    </footer>
+
+
+    <!-- CHECKOUT RECEIPT MODAL -->
+    <div id="receiptModal" class="fixed inset-0 bg-slate-900/60 modal-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="receiptModalCard">
+            <!-- Modal Header -->
+            <div class="bg-headerTeal p-6 text-white text-center relative">
+                <button onclick="closeReceiptModal()" class="absolute top-4 right-4 text-slate-300 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="w-12 h-12 rounded-full bg-activeYellow text-headerTeal flex items-center justify-center mx-auto mb-2 text-xl font-bold">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3 class="font-display font-bold text-xl">Venda Concluída!</h3>
+                <p class="text-xs text-cyan-200 mt-0.5">Recibo do pedido Beach Pet</p>
+            </div>
+
+            <!-- Receipt Body -->
+            <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                <div class="text-center border-b border-dashed border-slate-200 pb-3">
+                    <div class="text-xs text-slate-500 font-mono" id="receiptDate"></div>
+                    <div class="text-xs font-bold text-slate-700 mt-1" id="receiptId"></div>
+                    <div class="text-xs text-slate-500 mt-0.5" id="receiptPaymentMethod">Forma de pagamento: Pix</div>
+                </div>
+
+                <!-- Items Breakdown -->
+                <div id="receiptItemsList" class="space-y-2 text-xs divide-y divide-slate-100">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Totals -->
+                <div class="border-t border-slate-200 pt-3 space-y-1 text-xs">
+                    <div class="flex justify-between text-slate-500">
+                        <span>Subtotal</span>
+                        <span id="receiptSubtotal">R$ 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500" id="receiptDiscountRow">
+                        <span>Desconto</span>
+                        <span id="receiptDiscount">- R$ 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-teal-700 font-medium">
+                        <span>Doação ONG Repassada (5%)</span>
+                        <span id="receiptNgo">R$ 0.00</span>
+                    </div>
+                    <div class="flex justify-between text-sm font-bold text-headerTeal pt-2 border-t border-slate-200">
+                        <span>Total Pago</span>
+                        <span id="receiptTotal" class="text-lg">R$ 0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Actions -->
+            <div class="p-4 bg-slate-50 border-t border-slate-100 flex gap-2">
+                <button onclick="printReceipt()" class="flex-1 py-2.5 px-3 bg-white border border-slate-200 text-slate-700 rounded-xl font-semibold text-xs hover:bg-slate-100 transition flex items-center justify-center space-x-1.5">
+                    <i class="fa-solid fa-print"></i>
+                    <span>Imprimir</span>
+                </button>
+                <button onclick="closeReceiptModal()" class="flex-1 py-2.5 px-3 bg-headerTeal text-white rounded-xl font-semibold text-xs hover:bg-headerHover transition">
+                    Nova Venda
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- GENERIC INFO MODAL (For Painel & Estoque) -->
+    <div id="infoModal" class="fixed inset-0 bg-slate-900/60 modal-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+            <button onclick="closeInfoModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="infoModalContent">
+                <!-- Dynamic Content -->
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        /* ==========================================================================
+           PRODUCT DATABASE
+           Matching screen image strictly + additional items for completeness
+           ========================================================================== */
+        const PRODUCTS = [
+            { id: 1, name: "Água de Coco", category: "Bebidas", price: 8.00, stock: 40, icon: "🥥" },
+            { id: 2, name: "Suco de Melancia", category: "Bebidas", price: 10.00, stock: 27, icon: "🍉" },
+            { id: 3, name: "Caipirinha Tropical", category: "Drinks", price: 18.00, stock: 34, icon: "🍹" },
+            { id: 4, name: "Picolé de Manga", category: "Sorvetes", price: 6.00, stock: 59, icon: "🍦" },
+            { id: 5, name: "Açaí na Tigela", category: "Comidas", price: 15.00, stock: 19, icon: "🫐" },
+            { id: 6, name: "Espetinho de Frango", category: "Comidas", price: 12.00, stock: 17, icon: "🍢" },
+            { id: 7, name: "Chips de Mandioca", category: "Salgados", price: 7.00, stock: 54, icon: "🫘" },
+            { id: 8, name: "Boné Praiano", category: "Lembranças", price: 25.00, stock: 13, icon: "🧢" },
+            { id: 9, name: "Ímã de Geladeira", category: "Lembranças", price: 9.00, stock: 29, icon: "🐚" },
+            { id: 10, name: "Biscoito Pet", category: "Pet", price: 11.00, stock: 21, icon: "🦴" },
+            { id: 11, name: "Picolé de Fruta Pet", category: "Pet", price: 8.00, stock: 17, icon: "🐾" },
+            { id: 12, name: "Petisco Congelado Pet", category: "Pet", price: 13.00, stock: 8, icon: "❄️" },
+            { id: 13, name: "Água Mineral 500ml", category: "Bebidas", price: 5.00, stock: 80, icon: "💧" },
+            { id: 14, name: "Cerveja Gelada", category: "Drinks", price: 12.00, stock: 42, icon: "🍺" },
+            { id: 15, name: "Sorvete de Coco", category: "Sorvetes", price: 9.00, stock: 30, icon: "🍨" },
+            { id: 16, name: "Coleira Praiana", category: "Pet", price: 35.00, stock: 10, icon: "🐕" }
+        ];
+
+        const CATEGORIES = ["Todos", "Bebidas", "Drinks", "Sorvetes", "Comidas", "Salgados", "Lembranças", "Pet"];
+
+        // State variables
+        let activeCategory = "Todos";
+        let searchQuery = "";
+        let cart = []; // { product, quantity }
+        let selectedPayment = "pix";
+
+        // Initialize App on DOM Load
+        window.onload = function() {
+            renderCategories();
+            renderProducts();
+            updateCartUI();
+        };
+
+        // Render Category Filter Pills
+        function renderCategories() {
+            const pillsContainer = document.getElementById('categoryPills');
+            pillsContainer.innerHTML = CATEGORIES.map(cat => {
+                const isActive = cat === activeCategory;
+                const activeClass = isActive 
+                    ? "bg-headerTeal text-white shadow-sm font-semibold" 
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 font-medium";
+                
+                return `
+                    <button 
+                        onclick="setCategory('${cat}')" 
+                        class="px-4 py-2 rounded-xl transition flex-shrink-0 cursor-pointer ${activeClass}"
+                    >
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // Set Active Category
+        function setCategory(cat) {
+            activeCategory = cat;
+            renderCategories();
+            renderProducts();
+        }
+
+        // Filter & Render Products
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptySearch');
+
+            let filtered = PRODUCTS.filter(p => {
+                const matchesCategory = (activeCategory === "Todos") || (p.category === activeCategory);
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      p.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = "";
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                return;
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+            }
+
+            grid.innerHTML = filtered.map(prod => {
+                const formatPrice = prod.price.toFixed(2);
+                
+                return `
+                    <div 
+                        onclick="addToCart(${prod.id})" 
+                        class="bg-white rounded-2xl p-4 border border-slate-200/80 shadow-xs hover:shadow-md hover:border-teal-300 transition-all duration-200 cursor-pointer flex flex-col justify-between group h-full relative"
+                    >
+                        <!-- Top Emoji Graphic -->
+                        <div class="text-4xl text-center py-3 group-hover:scale-110 transition-transform duration-200">
+                            ${prod.icon}
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-slate-800 text-sm leading-tight group-hover:text-headerTeal transition-colors">
+                                ${prod.name}
+                            </h3>
+                            <p class="text-[11px] text-cyan-600 font-medium">
+                                ${prod.category}
+                            </p>
+                            
+                            <!-- Price formatted matching reference -->
+                            <div class="pt-1">
+                                <span class="price-text text-base">R$ ${formatPrice}</span>
+                            </div>
+                            
+                            <p class="text-[10px] text-slate-400 font-normal">
+                                ${prod.stock} em estoque
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function handleSearch() {
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearchBtn');
+            searchQuery = input.value.trim();
+
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+
+            renderProducts();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = "";
+            searchQuery = "";
+            document.getElementById('clearSearchBtn').classList.add('hidden');
+            renderProducts();
+        }
+
+        function resetFilters() {
+            activeCategory = "Todos";
+            clearSearch();
+            renderCategories();
+        }
+
+        // Add product to cart
+        function addToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingIndex = cart.findIndex(item => item.product.id === productId);
+
+            if (existingIndex > -1) {
+                if (cart[existingIndex].quantity < product.stock) {
+                    cart[existingIndex].quantity += 1;
+                } else {
+                    showToast(`Estoque máximo atingido para ${product.name}!`);
+                    return;
+                }
+            } else {
+                cart.push({ product: product, quantity: 1 });
+            }
+
+            updateCartUI();
+        }
+
+        // Change Cart Item Quantity
+        function updateQuantity(productId, delta) {
+            const index = cart.findIndex(item => item.product.id === productId);
+            if (index === -1) return;
+
+            const newQty = cart[index].quantity + delta;
+            
+            if (newQty <= 0) {
+                cart.splice(index, 1);
+            } else if (newQty > cart[index].product.stock) {
+                showToast(`Quantidade excede o estoque disponível (${cart[index].product.stock})`);
+            } else {
+                cart[index].quantity = newQty;
+            }
+
+            updateCartUI();
+        }
+
+        // Remove item from cart completely
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.product.id !== productId);
+            updateCartUI();
+        }
+
+        // Render Cart UI & calculate Totals
+        function updateCartUI() {
+            const cartList = document.getElementById('cartList');
+            const emptyState = document.getElementById('emptyCartState');
+            const countBadge = document.getElementById('cartCountBadge');
+            const finalizeBtn = document.getElementById('finalizeBtn');
+
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            countBadge.innerText = `${totalItems} ${totalItems === 1 ? 'item' : 'itens'}`;
+
+            if (cart.length === 0) {
+                cartList.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                emptyState.classList.add('flex');
+                
+                // Disable finalize button
+                finalizeBtn.disabled = true;
+                finalizeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                emptyState.classList.add('hidden');
+                emptyState.classList.remove('flex');
+                cartList.classList.remove('hidden');
+
+                // Enable finalize button
+                finalizeBtn.disabled = false;
+                finalizeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                // Render cart items
+                cartList.innerHTML = cart.map(item => {
+                    const itemTotal = (item.product.price * item.quantity).toFixed(2);
+                    return `
+                        <div class="flex items-center justify-between p-2.5 bg-slate-50 border border-slate-200/70 rounded-xl space-x-2">
+                            <div class="text-xl flex-shrink-0">${item.product.icon}</div>
+                            
+                            <div class="flex-1 min-w-0">
+                                <div class="text-xs font-bold text-slate-800 truncate">${item.product.name}</div>
+                                <div class="text-[11px] text-slate-500">R$ ${item.product.price.toFixed(2)} cada</div>
+                            </div>
+
+                            <!-- Qty Controls -->
+                            <div class="flex items-center space-x-1.5 bg-white border border-slate-200 rounded-lg p-1">
+                                <button onclick="updateQuantity(${item.product.id}, -1)" class="w-5 h-5 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-slate-100 rounded">
+                                    -
+                                </button>
+                                <span class="text-xs font-bold text-slate-800 w-4 text-center">${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.product.id}, 1)" class="w-5 h-5 flex items-center justify-center text-xs font-bold text-slate-600 hover:bg-slate-100 rounded">
+                                    +
+                                </button>
+                            </div>
+
+                            <!-- Item Total & Remove Button -->
+                            <div class="text-right flex-shrink-0 pl-1">
+                                <div class="text-xs font-bold text-headerTeal">R$ ${itemTotal}</div>
+                                <button onclick="removeFromCart(${item.product.id})" class="text-[10px] text-red-400 hover:text-red-600 font-medium">
+                                    Remover
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateCartTotals();
+        }
+
+        function updateCartTotals() {
+            const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+            
+            const discountInput = document.getElementById('discountInput');
+            let discount = parseFloat(discountInput.value) || 0;
+            
+            if (discount > subtotal) {
+                discount = subtotal;
+                discountInput.value = subtotal.toFixed(2);
+            }
+
+            const total = Math.max(0, subtotal - discount);
+            const ngoDonation = total * 0.05; // 5% ONG Donation
+
+            document.getElementById('subtotalVal').innerText = `R$ ${subtotal.toFixed(2)}`;
+            document.getElementById('totalVal').innerText = `R$ ${total.toFixed(2)}`;
+            document.getElementById('ngoVal').innerText = `R$ ${ngoDonation.toFixed(2)}`;
+        }
+
+        function selectPayment(method) {
+            selectedPayment = method;
+            const methods = ['dinheiro', 'pix', 'debito', 'credito'];
+            
+            methods.forEach(m => {
+                const btn = document.getElementById(`pay-${m}`);
+                if (m === method) {
+                    btn.className = "pay-btn flex items-center justify-center space-x-1.5 py-2 px-2 bg-headerTeal border border-headerTeal text-white rounded-xl text-xs font-semibold shadow-xs transition";
+                } else {
+                    btn.className = "pay-btn flex items-center justify-center space-x-1.5 py-2 px-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 hover:bg-slate-100 transition";
+                }
+            });
+        }
+
+        function finalizeSale() {
+            if (cart.length === 0) return;
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+            const discount = parseFloat(document.getElementById('discountInput').value) || 0;
+            const total = Math.max(0, subtotal - discount);
+            const ngo = total * 0.05;
+
+            // Populate receipt data
+            const now = new Date();
+            document.getElementById('receiptDate').innerText = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR');
+            document.getElementById('receiptId').innerText = `PEDIDO #${Math.floor(100000 + Math.random() * 900000)}`;
+            
+            const methodNames = {
+                'dinheiro': 'Dinheiro 💵',
+                'pix': 'Pix 📱',
+                'debito': 'Cartão de Débito 💳',
+                'credito': 'Cartão de Crédito 💳'
+            };
+            document.getElementById('receiptPaymentMethod').innerText = `Forma de Pagamento: ${methodNames[selectedPayment] || 'Pix'}`;
+
+            // Receipt items list
+            document.getElementById('receiptItemsList').innerHTML = cart.map(item => `
+                <div class="flex justify-between py-1">
+                    <span class="text-slate-700 font-medium">${item.quantity}x ${item.product.name}</span>
+                    <span class="font-semibold text-slate-800">R$ ${(item.product.price * item.quantity).toFixed(2)}</span>                card.classList.add('scale-100', 'opacity-100');
+…</html>
+                </div>
+            `).join('');
+
+            document.getElementById('receiptSubtotal').innerText = `R$ ${subtotal.toFixed(2)}`;
+            document.getElementById('receiptDiscount').innerText = `- R$ ${discount.toFixed(2)}`;
+            document.getElementById('receiptNgo').innerText = `R$ ${ngo.toFixed(2)}`;
+            document.getElementById('receiptTotal').innerText = `R$ ${total.toFixed(2)}`;
+
+            // Deduct stock from products database
+            cart.forEach(item => {
+                const prod = PRODUCTS.find(p => p.id === item.product.id);
+                if (prod) {
+                    prod.stock = Math.max(0, prod.stock - item.quantity);
+                }
+            });
+
+            // Show Receipt Modal
+            const modal = document.getElementById('receiptModal');
+            const card = document.getElementById('receiptModalCard');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeReceiptModal() {
+            const card = document.getElementById('receiptModalCard');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                document.getElementById('receiptModal').classList.add('hidden');
+                
+                // Clear Cart
+                cart = [];
+                document.getElementById('discountInput').value = "0";
+                updateCartUI();
+                renderProducts(); // Update stocks on grid
+            }, 200);
+        }
+
+        function printReceipt() {
+            window.print();
+        }
+
+        function openModal(type) {
+            const modal = document.getElementById('infoModal');
+            const content = document.getElementById('infoModalContent');
+
+            if (type === 'sair') {
+                content.innerHTML = `
+                    <div class="text-center space-y-4">
+                        <i class="fa-solid fa-door-open text-amber-500 text-3xl"></i>
+                        <h3 class="font-display font-bold text-xl text-headerTeal">Encerrar Sessão?</h3>
+                        <p class="text-xs text-slate-500">Você está conectado como Ana Souza (Admin).</p>
+                        <div class="flex gap-2 pt-2">
+                            <button onclick="closeInfoModal()" class="flex-1 py-2 bg-slate-100 rounded-xl font-semibold text-xs text-slate-700">Cancelar</button>
+                            <button onclick="closeInfoModal()" class="flex-1 py-2 bg-red-500 text-white rounded-xl font-semibold text-xs">Sair do Sistema</button>
+                        </div>
+                    </div>
+                `;
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeInfoModal() {
+            document.getElementById('infoModal').classList.add('hidden');
+        }
+
+        // Helper Toast Notification
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = "fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-4 py-2.5 rounded-full shadow-lg z-50 transition-all opacity-0 scale-95";
+            toast.innerText = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'scale-95');
+                toast.classList.add('opacity-100', 'scale-100');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
