@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeachPet Estoque</title>
+  <!-- Link para o arquivo CSS externo -->
+  <link rel="stylesheet" href="FeiraManuestoque.css">
+  <!-- Fonte Google (Poppins) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-icon">🏖️</div>
+      <div class="brand-text">
+        <h3>Beach Pet</h3>
+        <span>Loja Praiana</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn">🏠 Painel</button>
+      <button class="nav-btn active">📦 Estoque</button>
+      <button class="nav-btn">🛒 Caixa</button>
+    </nav>
+
+    <div class="user-info">
+      <span>Ana Souza <small>⭐ Admin</small></span>
+      <button class="btn-logout">Sair</button>
+    </div>
+  </header>
+
+  <!-- CABEÇALHO DA PÁGINA -->
+    <div class="page-header">
+      <div>
+        <h1>📦 Estoque</h1>
+        <p class="subtitle" id="total-produtos-sub">0 produtos cadastrados</p>
+      </div>
+      <button class="btn-primary">+ Novo Produto</button>
+    </div>
+
+    <!-- BARRA DE PESQUISA E FILTROS -->
+    <div class="filter-section">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Buscar produto, código ou categoria...">
+      </div>
+      
+      <div class="categories">
+        <button class="cat-btn active">Todas</button>
+        <button class="cat-btn">Bebidas</button>
+        <button class="cat-btn">Drinks</button>
+        <button class="cat-btn">Sorvetes</button>
+        <button class="cat-btn">Comidas</button>
+        <button class="cat-btn">Salgados</button>
+        <button class="cat-btn">Lembranças</button>
+        <button class="cat-btn">Pet</button>
+      </div>
+    </div>
+
+    <!-- CARDS INFORMATIVOS (MÉTRICAS) -->
+    <section class="cards-grid">
+      <div class="card card-blue">
+        <span>Total de SKUs</span>
+        <h2 id="metric-skus">0</h2>
+      </div>
+      <div class="card card-yellow">
+        <span>Itens em estoque</span>
+        <h2 id="metric-itens">0</h2>
+      </div>
+      <div class="card card-orange">
+        <span>Estoque baixo (&lt;15)</span>
+        <h2 id="metric-baixo">0</h2>
+      </div>
+      <div class="card card-darkblue">
+        <span>Valor total (venda)</span>
+        <h2 id="metric-valor">R$ 0,00</h2>
+      </div>
+    </section>
+    <!-- TABELA DE PRODUTOS -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Código</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="corpo-tabela">
+          <!-- Os produtos serão inseridos aqui automaticamente pelo MySQL -->
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- MODAL DE NOVO PRODUTO -->
+  <div id="modal-produto" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+      <h2>➕ Novo Produto</h2>
+      
+      <form id="form-novo-produto">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="p-nome">Nome *</label>
+            <input type="text" id="p-nome" placeholder="Ex: Água de Coco" required>
+          </div>
+          <div class="form-group">
+            <label for="p-codigo">Código *</label>
+            <input type="number" id="p-codigo" placeholder="Ex: 1001" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="p-categoria">Categoria *</label>
+          <select id="p-categoria" required>
+            <option value="">Selecione...</option>
+            <option value="1">Bebidas</option>
+            <option value="2">Drinks</option>
+            <option value="3">Sorvetes</option>
+            <option value="4">Comidas</option>
+            <option value="5">Salgados</option>
+            <option value="6">Lembranças</option>
+            <option value="7">Pet</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="p-preco">Preço (R$) *</label>
+            <input type="number" step="0.01" id="p-preco" placeholder="0.00" required>
+          </div>
+          <div class="form-group">
+            <label for="p-quantidade">Quantidade *</label>
+            <input type="number" id="p-quantidade" placeholder="0" required>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn-salvar">Adicionar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPT DE INTEGRAÇÃO COM MÉTRICAS E FILTROS -->
+  <script>
+    // Variáveis globais para os filtros
+    let produtosGlobais = [];
+    let categoriaAtiva = 'Todas';
+
+    // 1. Carrega os produtos do MySQL
+    function carregarProdutos() {
+      fetch('http://localhost:3000/produtos')
+        .then(resposta => resposta.json())
+        .then(produtos => {
+          produtosGlobais = produtos;
+          atualizarMetricas(produtosGlobais);
+          aplicarFiltros();
+        })
+        .catch(erro => console.error('Erro ao carregar produtos:', erro));
+    }
+
+    // 2. Calcula e atualiza os Cards de Métricas
+    function atualizarMetricas(produtos) {
+      const totalSKUs = produtos.length;
+      const totalItens = produtos.reduce((acc, p) => acc + Number(p.quantidade_estoque || 0), 0);
+      const estoqueBaixo = produtos.filter(p => p.status_estoque === 'Baixo' || p.quantidade_estoque < 15).length;
+      const valorTotal = produtos.reduce((acc, p) => acc + (Number(p.preco_venda || 0) * Number(p.quantidade_estoque || 0)), 0);
+
+      document.getElementById('total-produtos-sub').textContent = `${totalSKUs} produtos cadastrados`;
+      document.getElementById('metric-skus').textContent = totalSKUs;
+      document.getElementById('metric-itens').textContent = totalItens;
+      document.getElementById('metric-baixo').textContent = estoqueBaixo;
+      document.getElementById('metric-valor').textContent = `R$ ${valorTotal.toFixed(2)}`;
+    }
+
+    // 3. Renderiza a tabela com o botão de excluir ativo
+    function renderizarTabela(lista) {
+      const tabela = document.getElementById('corpo-tabela');
+      tabela.innerHTML = '';
+
+      if (lista.length === 0) {
+        tabela.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px;">Nenhum produto encontrado.</td></tr>`;
+        return;
+      }
+
+      lista.forEach(produto => {
+        const linha = document.createElement('tr');
+        
+        const isBaixo = produto.status_estoque === 'Baixo' || produto.quantidade_estoque < 15;
+        const statusEmoji = isBaixo ? '⚠️️ Baixo' : '✅ OK';
+        const statusClasse = isBaixo ? 'status-baixo' : 'status-ok';
+
+        linha.innerHTML = `
+          <td><strong>${produto.nome}</strong></td>
+          <td>#${produto.id_produto}</td>
+          <td>🏷️ ${produto.categoria || 'Sem categoria'}</td>
+          <td>R$ ${Number(produto.preco_venda).toFixed(2)}</td>
+          <td>📦 ${produto.quantidade_estoque} un</td>
+          <td><span class="badge ${statusClasse}">${statusEmoji}</span></td>
+          <td>
+            <button class="btn-action">✏️</button>
+            <button class="btn-action" onclick="excluirProduto('${produto.id_produto}', '${produto.nome}')">🗑️</button>
+          </td>
+        `;
+        
+        tabela.appendChild(linha);
+      });
+    }
+
+    // 4. Função para Excluir Produto
+    function excluirProduto(id, nome) {
+      if (confirm(`Tem certeza que deseja excluir o produto "${nome}" (#${id})?`)) {
+        fetch(`http://localhost:3000/produtos/${id}`, {
+          method: 'DELETE'
+        })
+          .then(res => res.json())
+          .then(dados => {
+            alert(dados.message || 'Produto excluído com sucesso!');
+            carregarProdutos(); // Atualiza a tabela e os cards automaticamente!
+          })
+          .catch(erro => console.error('Erro ao excluir produto:', erro));
+      }
+    }
+
+    // 5. Aplica os Filtros (Pesquisa + Categoria)
+    function aplicarFiltros() {
+      const termoPesquisa = document.querySelector('.search-box input').value.toLowerCase().trim();
+
+      const produtosFiltrados = produtosGlobais.filter(produto => {
+        const nome = produto.nome ? produto.nome.toLowerCase() : '';
+        const codigo = produto.id_produto ? produto.id_produto.toString().toLowerCase() : '';
+        const categoria = produto.categoria ? produto.categoria.toLowerCase() : '';
+
+        const bateTexto = nome.includes(termoPesquisa) || 
+                          codigo.includes(termoPesquisa) || 
+                          categoria.includes(termoPesquisa);
+
+        const bateCategoria = (categoriaAtiva === 'Todas') || 
+                              (categoria === categoriaAtiva.toLowerCase());
+
+        return bateTexto && bateCategoria;
+      });
+
+      renderizarTabela(produtosFiltrados);
+    }
+
+    // Eventos de Busca e Categoria
+    document.querySelector('.search-box input').addEventListener('input', aplicarFiltros);
+
+    document.querySelectorAll('.cat-btn').forEach(botao => {
+      botao.addEventListener('click', function() {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        categoriaAtiva = this.textContent.trim();
+        aplicarFiltros();
+      });
+    });
+
+    // Controlos do Modal
+    function abrirModal() {
+      document.getElementById('modal-produto').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modal-produto').style.display = 'none';
+      document.getElementById('form-novo-produto').reset();
+    }
+
+    document.querySelector('.btn-primary').addEventListener('click', abrirModal);
+
+    document.getElementById('form-novo-produto').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const novoProduto = {
+        nome: document.getElementById('p-nome').value,
+        id_produto: document.getElementById('p-codigo').value,
+        id_categoria: document.getElementById('p-categoria').value,
+        preco_venda: parseFloat(document.getElementById('p-preco').value),
+        quantidade_estoque: parseInt(document.getElementById('p-quantidade').value)
+      };
+
+      fetch('http://localhost:3000/produtos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoProduto)
+      })
+        .then(res => res.json())
+        .then(dados => {
+          alert('Produto cadastrado com sucesso!');
+          fecharModal();
+          carregarProdutos();
+        })
+        .catch(erro => console.error('Erro ao cadastrar produto:', erro));
+    });
+
+    // Inicialização
+    carregarProdutos();
+  </script>
+</body>
+</html>
