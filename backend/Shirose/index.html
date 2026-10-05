@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeachPet - PDV & Estoque</title>
+    <link rel="stylesheet" href="caixahumanizado.css">
+</head>
+<body>
+    <nav>
+        <h4>🌊 BeachPet</h4> 
+        <div>
+            <button id="btn-painel">🏠 Painel</button> 
+            <button id="btn-estoque">📦 Estoque</button> 
+            <button id="btn-caixa">🛒 Caixa</button> 
+            <button id="btn-sair">Sair</button>
+        </div>
+    </nav>
+
+    <div class="app-container">
+        <!-- Coluna da Esquerda -->
+        <div class="main-content">
+            <input type="text" id="search" name="search" placeholder="🔍 Buscar produto ou código de barras..."> 
+
+            <div id="categorias">
+                <button class="btn-categoria" data-cat="todos">Todos</button> 
+                <button class="btn-categoria" data-cat="bebidas">Bebidas</button> 
+                <button class="btn-categoria" data-cat="sorvetes">Sorvetes</button> 
+                <button class="btn-categoria" data-cat="comidas">Comidas</button> 
+                <button class="btn-categoria" data-cat="lembrancas">Lembranças</button> 
+                <button class="btn-categoria" data-cat="pet">Pet</button>
+            </div>
+
+            <div id="produtos-container">
+                <button class="btn-produto" data-id="1" data-nome="Água de coco" data-preco="8.00">🥥 Água de coco <br> R$ 8,00</button>
+                <button class="btn-produto" data-id="2" data-nome="Suco de Melancia" data-preco="10.00">🍉 Suco de Melancia <br> R$ 10,00</button>
+                <button class="btn-produto" data-id="3" data-nome="Caipirinha Tropical" data-preco="15.00">🍹 Caipirinha Tropical <br> R$ 15,00</button> 
+                <button class="btn-produto" data-id="4" data-nome="Sorvete de Manga" data-preco="7.00">🍦 Sorvete de Manga <br> R$ 7,00</button>
+                <button class="btn-produto" data-id="5" data-nome="Açaí na Tigela" data-preco="18.00">🫐 Açaí na Tigela <br> R$ 18,00</button>
+                <button class="btn-produto" data-id="6" data-nome="Espetinho de Frango" data-preco="12.00">🍢 Espetinho de Frango <br> R$ 12,00</button> 
+                <button class="btn-produto" data-id="7" data-nome="Chips de Mandioca" data-preco="9.00">🫘 Chips de Mandioca <br> R$ 9,00</button>
+                <button class="btn-produto" data-id="8" data-nome="Boné Praiano" data-preco="35.00">🧢 Boné Praiano <br> R$ 35,00</button>
+                <button class="btn-produto" data-id="9" data-nome="Imã de Geladeira" data-preco="10.00">🐚 Imã de Geladeira <br> R$ 10,00</button> 
+                <button class="btn-produto" data-id="10" data-nome="Biscoito Pet" data-preco="6.50">🦴 Biscoito Pet <br> R$ 6,50</button>
+                <button class="btn-produto" data-id="11" data-nome="Picolé de Fruta Pet" data-preco="8.00">🐾 Picolé de Fruta Pet <br> R$ 8,00</button>
+                <button class="btn-produto" data-id="12" data-nome="Petisco Congelado Pet" data-preco="10.00">❄️ Petisco Congelado Pet <br> R$ 10,00</button>
+            </div>
+        </div>
+
+        <!-- Coluna da Direita (Painel do Carrinho) -->
+        <div class="carrinho-sidebar">
+            <h3>🛒 Carrinho de Compras</h3>
+            <table id="tabela-carrinho">
+                <thead>
+                    <tr>
+                        <th>Produto</th>
+                        <th>Qtd</th>
+                        <th>Subtotal</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="itens-carrinho">
+                </tbody>
+            </table>
+
+            <div style="margin-bottom: 10px;">
+                <label for="discount">Desconto R$:</label>
+                <input type="number" id="discount" name="discount" value="0.00" min="0" step="0.50" style="width: 100%; padding: 6px; margin-top: 4px;">
+            </div>
+            
+            <p style="font-size: 14px; margin-top: 10px;">Subtotal: R$ <span id="valor-subtotal">0.00</span></p>
+            <p style="font-size: 16px; margin-top: 5px;"><strong>Total Final: R$ <span id="valor-total">0.00</span></strong></p>
+
+            <h5 style="margin-top: 15px;">Forma de Pagamento</h5>
+            <div id="metodos-pagamento">
+                <button class="btn-pagamento" data-metodo="dinheiro">💵 Dinheiro</button> 
+                <button class="btn-pagamento" data-metodo="pix">📱 Pix</button> 
+                <button class="btn-pagamento" data-metodo="credito">💳 Crédito</button> 
+                <button class="btn-pagamento" data-metodo="debito">💳 Débito</button>
+            </div>
+            <p style="font-size: 12px; color: #666; margin-top: 5px;">Selecionado: <strong id="forma-selecionada">Nenhuma</strong></p>
+
+            <button id="btn-finalizar-venda">✅ Finalizar Venda</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
