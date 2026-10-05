@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beach Pet - Painel</title>
+    <link rel="stylesheet" href="painel.css">
+    <!-- Font Awesome para os ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonte Google Inter (opcional, deixa o design idêntico ao Figma) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- NAVBAR SUPERIOR -->
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <i class="fa-solid fa-umbrella-beach"></i>
+            </div>
+            <div class="brand-info">
+                <h1>Beach Pet</h1>
+                <small>Loja Praia</small>
+            </div>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-item active"><i class="fa-solid fa-chart-pie"></i> Painel</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-box"></i> Estoque</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-cash-register"></i> Caixa</a>
+        </nav>
+
+        <div class="nav-right">
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">Ana Souza</span>
+                    <span class="user-role"><i class="fa-solid fa-star"></i> Admin</span>
+                </div>
+                <button class="btn-logout">Sair</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTEÚDO PRINCIPAL (DASHBOARD) -->
+    <main class="dashboard-container">
+        
+        <!-- HEADER DE SAUDAÇÃO -->
+        <section class="welcome-header">
+            <div class="welcome-text">
+                <h2>Bom dia, Ana! 🌤️</h2>
+                <p>segunda-feira, 05 de outubro de 2026</p>
+            </div>
+            <button class="btn-primary-action">Iniciar Venda</button>
+        </section>
+
+        <!-- CARDS DE MÉTRICAS -->
+        <section class="metrics-grid">
+            <div class="card-metric card-yellow">
+                <div class="card-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                <span class="metric-label">Vendas Hoje</span>
+                <h3 class="metric-value">R$ 383,50</h3>
+                <span class="metric-sub">6 transações</span>
+            </div>
+
+            <div class="card-metric card-blue">
+                <div class="card-icon"><i class="fa-solid fa-receipt"></i></div>
+                <span class="metric-label">Ticket Médio</span>
+                <h3 class="metric-value">R$ 63,92</h3>
+                <span class="metric-sub">por venda</span>
+            </div>
+
+            <div class="card-metric card-dark-blue">
+                <div class="card-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <span class="metric-label">Itens em Estoque</span>
+                <h3 class="metric-value">352</h3>
+                <span class="metric-sub">12 produtos</span>
+            </div>
+
+            <div class="card-metric card-green">
+                <div class="card-icon"><i class="fa-solid fa-heart"></i></div>
+                <span class="metric-label">Doação Hoje <i class="fa-solid fa-chevron-right"></i></span>
+                <h3 class="metric-value">R$ 19,18</h3>
+                <span class="metric-sub">5% para ONGs</span>
+            </div>
+        </section>
+
+        <!-- LAYOUT DE 2 COLUNAS (CONTEÚDO PRINCIPAL) -->
+        <div class="dashboard-content-grid">
+            
+            <!-- COLUNA DA ESQUERDA: VENDAS RECENTES -->
+            <section class="card-panel sales-panel">
+                <div class="panel-header">
+                    <h3>Vendas Recentes</h3>
+                    <span class="badge-tag">Hoje</span>
+                </div>
+
+                <div class="sales-list">
+                    <div class="sale-item">
+                        <div class="sale-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                        <div class="sale-details">
+                            <span class="sale-qty">3 itens</span>
+                            <span class="sale-time">08:14</span>
+                        </div>
+                        <div class="sale-price-info">
+                            <span class="sale-amount">R$ 41,00</span>
+                            <span class="payment-method">Pix</span>
+                        </div>
+                    </div>
+
+                    <div class="sale-item">
+                        <div class="sale-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                        <div class="sale-details">
+                            <span class="sale-qty">5 itens</span>
+                            <span class="sale-time">09:03</span>
+                        </div>
+                        <div class="sale-price-info">
+                            <span class="sale-amount">R$ 78,50</span>
+                            <span class="payment-method">Débito</span>
+                        </div>
+                    </div>
+
+                    <div class="sale-item">
+                        <div class="sale-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                        <div class="sale-details">
+                            <span class="sale-qty">2 itens</span>
+                            <span class="sale-time">10:22</span>
+                        </div>
+                        <div class="sale-price-info">
+                            <span class="sale-amount">R$ 26,00</span>
+                            <span class="payment-method">Dinheiro</span>
+                        </div>
+                    </div>
+
+                    <div class="sale-item highlight">
+                        <div class="sale-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                        <div class="sale-details">
+                            <span class="sale-qty">7 itens</span>
+                            <span class="sale-time">11:47</span>
+                        </div>
+                        <div class="sale-price-info">
+                            <span class="sale-amount">R$ 134,00</span>
+                            <span class="payment-method">Crédito</span>
+                        </div>
+                    </div>
+
+                    <div class="sale-item">
+                        <div class="sale-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                        <div class="sale-details">
+                            <span class="sale-qty">4 itens</span>
+                            <span class="sale-time">13:10</span>
+                        </div>
+                        <div class="sale-price-info">
+                            <span class="sale-amount">R$ 55,00</span>
+                            <span class="payment-method">Pix</span>
+                        </div>
+                    </div>
+
+                    <div class="sale-item">
+                        <div class="sale-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+                        <div class="sale-details">
+                            <span class="sale-qty">3 itens</span>
+                            <span class="sale-time">14:38</span>
+                        </div>
+                        <div class="sale-price-info">
+                            <span class="sale-amount">R$ 49,00</span>
+                            <span class="payment-method">Débito</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COLUNA DA DIREITA: CATEGORIAS, ESTOQUE BAIXO E DOAÇÃO -->
+            <div class="right-column">
+                
+                <!-- BLUDO CATEGORIAS -->
+                <section class="card-panel categories-panel">
+                    <h3>Categorias</h3>
+                    <ul class="categories-list">
+                        <li><span><i class="fa-solid fa-glass-water"></i> Bebidas</span> <span class="count-badge">2 itens</span></li>
+                        <li><span><i class="fa-solid fa-martini-glass-citrus"></i> Drinks</span> <span class="count-badge">1 item</span></li>
+                        <li><span><i class="fa-solid fa-ice-cream"></i> Sorvetes</span> <span class="count-badge">1 item</span></li>
+                        <li><span><i class="fa-solid fa-utensils"></i> Comidas</span> <span class="count-badge">2 itens</span></li>
+                        <li><span><i class="fa-solid fa-drumstick-bite"></i> Salgados</span> <span class="count-badge">1 item</span></li>
+                        <li><span><i class="fa-solid fa-gift"></i> Lembranças</span> <span class="count-badge">2 itens</span></li>
+                        <li><span><i class="fa-solid fa-dog"></i> Pet</span> <span class="count-badge">3 itens</span></li>
+                    </ul>
+                </section>
+
+                <!-- BLOCO ESTOQUE BAIXO -->
+                <section class="card-panel low-stock-panel">
+                    <div class="warning-title">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <h3>Estoque Baixo</h3>
+                    </div>
+                    <ul class="low-stock-list">
+                        <li>
+                            <span><i class="fa-solid fa-hat-cowboy"></i> Boné Praiano</span>
+                            <span class="stock-alert">14 un</span>
+                        </li>
+                        <li>
+                            <span><i class="fa-solid fa-bone"></i> Petisco Congelado Pet</span>
+                            <span class="stock-alert">10 un</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="link-full-stock">Ver estoque completo →</a>
+                </section>
+
+                <!-- BANNER DE DOAÇÕES -->
+                <section class="card-panel donation-banner">
+                    <div class="donation-header">
+                        <i class="fa-solid fa-paws"></i>
+                    </div>
+                    <h4>R$ 19,18 doados</h4>
+                    <p class="donation-title">para ONGs de animais hoje</p>
+                    <p class="donation-desc">Cada venda contribui 5% para o cuidado dos bichinhos das praias.</p>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- SEÇÃO INFERIOR: AÇÕES RÁPIDAS -->
+        <section class="quick-actions-section">
+            <h3>Ações Rápidas (Admin)</h3>
+            <div class="quick-actions-grid">
+                <button class="action-btn"><i class="fa-solid fa-plus"></i></button>
+                <button class="action-btn"><i class="fa-solid fa-cart-shopping"></i></button>
+                <button class="action-btn"><i class="fa-solid fa-box"></i></button>
+                <button class="action-btn"><i class="fa-solid fa-paw"></i></button>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
