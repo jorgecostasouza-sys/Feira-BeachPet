@@ -9,4 +9,4 @@ Cada compra feita no nosso site tera parte do dinheiro ser doado para ongs dedic
 - Um caixa onde clientes podem comprar/encomendar os produtos, tendo um sistema de caixa e valor de compra.
 
 # Sobre o projeto BeachPet
-O projeto BeachPet foi feito por um grupo de 5 integrantes, sendo: Jorge, Manuella, Julia, Eduarda e Yohan. O projeto foi feito com um período de um mês, e ele foi feito com muito amor e compaixão <3
+O projeto BeachPet foi feito por um grupo de 5 integrantes, sendo: Jorge, Manuella, Julia, Eduarda e Yohan. O projeto foi feito com um período de um mês, e ele foi feito com muito amor e compaixão (e lágrimas) <3
