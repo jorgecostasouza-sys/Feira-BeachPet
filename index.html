@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beach Pet - Sistema de Caixa e Estoque</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0a3a5c;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Fundo com listras diagonais */
+    .background {
+      position: absolute;
+      inset: 0;
+      background: 
+        repeating-linear-gradient(
+          -45deg,
+          #0a3a5c,
+          #0a3a5c 12px,
+          #0c456b 12px,
+          #0c456b 24px
+        );
+      z-index: 0;
+    }
+
+    /* Formas decorativas */
+    .shape {
+      position: absolute;
+      z-index: 1;
+      opacity: 0.9;
+    }
+
+    .circle-yellow {
+      width: 70px;
+      height: 70px;
+      background: #e8c547;
+      border-radius: 50%;
+      top: 8%;
+      left: 8%;
+    }
+
+    .diamond-brown {
+      width: 55px;
+      height: 55px;
+      background: #c47a3a;
+      transform: rotate(45deg);
+      top: 12%;
+      right: 10%;
+    }
+
+    .circle-blue {
+      width: 80px;
+      height: 80px;
+      background: #2a7ab8;
+      border-radius: 50%;
+      bottom: 18%;
+      left: 6%;
+    }
+
+    .square-green {
+      width: 60px;
+      height: 60px;
+      background: #b8a03a;
+      bottom: 10%;
+      right: 8%;
+    }
+
+    /* Conteúdo principal */
+    .content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 20px;
+      max-width: 480px;
+      width: 100%;
+    }
+
+    /* Logo da onda */
+    .logo {
+      width: 110px;
+      height: 90px;
+      margin: 0 auto 18px;
+      position: relative;
+    }
+
+    .logo svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.25));
+    }
+
+    .title {
+      color: #ffffff;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .subtitle {
+      color: #a8d4f0;
+      font-size: 1.05rem;
+      font-weight: 400;
+      margin-bottom: 36px;
+    }
+
+    /* Card "Nossa causa" */
+    .cause-card {
+      background: rgba(15, 60, 95, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 18px 22px;
+      text-align: left;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      margin-bottom: 40px;
+    }
+
+    .cause-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .cause-header .icon {
+      color: #4fc3f7;
+      font-size: 1.1rem;
+    }
+
+    .cause-header h3 {
+      color: #f0c14b;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .cause-card p {
+      color: #d0e8f8;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Ícones de categorias */
+    .categories {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .category {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: #8ec8e8;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .category .emoji {
+      font-size: 1.6rem;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    }
+
+    /* Pequeno ponto decorativo no card */
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: #e07a9a;
+      border-radius: 50%;
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.8;
+    }
+
+    .cause-wrapper {
+      position: relative;
+    }
+
+    /* Responsividade */
+    @media (max-width: 480px) {
+      .title {
+        font-size: 2.1rem;
+      }
+      .circle-yellow { width: 50px; height: 50px; }
+      .diamond-brown { width: 40px; height: 40px; }
+      .circle-blue { width: 55px; height: 55px; }
+      .square-green { width: 45px; height: 45px; }
+      .categories { gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="background"></div>
+
+  <!-- Formas decorativas -->
+  <div class="shape circle-yellow"></div>
+  <div class="shape diamond-brown"></div>
+  <div class="shape circle-blue"></div>
+  <div class="shape square-green"></div>
+
+  <div class="content">
+    <!-- Logo onda -->
+    <div class="logo">
+      <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Onda azul -->
+        <path d="M10 70 C30 40, 50 55, 70 35 C85 20, 100 30, 115 25 L115 85 C90 80, 70 90, 45 80 C30 75, 20 85, 10 70 Z" fill="#1e88e5"/>
+        <path d="M15 72 C32 48, 52 60, 70 42 C82 30, 95 38, 110 32 L110 82 C88 78, 70 88, 48 78 C35 74, 25 82, 15 72 Z" fill="#42a5f5"/>
+        <!-- Espuma branca -->
+        <path d="M25 55 C40 35, 55 48, 70 30 C78 22, 88 28, 98 24 L95 45 C80 42, 68 55, 50 48 C40 44, 32 52, 25 55 Z" fill="#ffffff"/>
+        <path d="M30 58 C42 42, 58 52, 72 38 C78 32, 86 36, 94 33 L92 48 C80 46, 68 56, 52 50 C42 47, 35 54, 30 58 Z" fill="#e3f2fd"/>
+      </svg>
+    </div>
+
+    <h1 class="title">Beach Pet</h1>
+    <p class="subtitle">Sistema de Caixa e Estoque</p>
+
+    <!-- Card Nossa causa -->
+    <div class="cause-wrapper">
+      <div class="dot"></div>
+      <div class="cause-card">
+        <div class="cause-header">
+          <span class="icon">💙</span>
+          <h3>Nossa causa</h3>
+        </div>
+        <p>
+          5% de cada venda é destinado a ONGs de proteção animal e cuidado com os bichanos abandonados nas praias.
+        </p>
+      </div>
+    </div>
+    <!-- Categorias -->
+    <div class="categories">
+      <div class="category">
+        <span class="emoji">🍹</span>
+        <span>Drinks</span>
+      </div>
+      <div class="category">
+        <span class="emoji">🦴</span>
+        <span>Comidas</span>
+      </div>
+      <div class="category">
+        <span class="emoji">🐚</span>
+        <span>Lembranças</span>
+      </div>
+      <div class="category">
+        <span class="emoji">🐾</span>
+        <span>Pet</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

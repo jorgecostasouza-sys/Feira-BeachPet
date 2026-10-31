@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeachPet Estoque</title>
+  <link rel="stylesheet" href="estoque.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Estilos do Modal de Novo Produto */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #FFFFFF;
+      padding: 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+    .modal-content h2 { margin-bottom: 16px; color: #124A6F; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; color: #2D4356; }
+    .form-group input, .form-group select {
+      width: 100%; padding: 10px; border: 1.5px solid #D9E4EC; border-radius: 8px; outline: none; font-size: 14px;
+    }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+    .btn-cancel { background: #E8F3FA; color: #3C83B8; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+    .btn-save { background: #EBB829; color: #124A6F; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-icon">🏖️</div>
+      <div class="brand-text">
+        <h3>Beach Pet</h3>
+        <span>Loja Praiana</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <button class="nav-btn" onclick="window.location.href='painel.html'">🏠 Painel</button>
+      <button class="nav-btn active">📦 Estoque</button>
+      <button class="nav-btn" onclick="window.location.href='caixa.html'">🛒 Caixa</button>
+    </nav>
+
+    <div class="user-info">
+      <span>Ana Souza <small>⭐ Admin</small></span>
+      <button class="btn-logout" onclick="window.location.href='login.html'">Sair</button>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="container">
+    
+    <!-- CABEÇALHO DA PÁGINA -->
+    <div class="page-header">
+      <div>
+        <h1>📦 Estoque</h1>
+        <p class="subtitle" id="sub-total-skus">Carregando produtos...</p>
+      </div>
+      <button class="btn-primary" onclick="abrirModal()">+ Novo Produto</button>
+    </div>
+
+    <!-- CARDS INFORMATIVOS (MÉTRICAS) -->
+    <section class="cards-grid">
+      <div class="card card-blue">
+        <span>Total de SKUs</span>
+        <h2 id="card-skus">0</h2>
+      </div>
+      <div class="card card-yellow">
+        <span>Itens em estoque</span>
+        <h2 id="card-total-itens">0</h2>
+      </div>
+      <div class="card card-orange">
+        <span>Estoque baixo (&lt;15)</span>
+        <h2 id="card-baixo">0</h2>
+      </div>
+      <div class="card card-darkblue">
+        <span>Valor estimado de vendas</span>
+        <h2 id="card-valor-total">R$ 0,00</h2>
+      </div>
+    </section>
+
+    <!-- TABELA DE PRODUTOS -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Código</th>
+            <th>Categoria</th>
+            <th>Preço</th>
+            <th>Estoque</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-produtos">
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 20px;">Carregando estoque do banco de dados...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <!-- MODAL DE ADICIONAR PRODUTO -->
+  <div class="modal-overlay" id="modal-produto">
+    <div class="modal-content">
+      <h2>+ Novo Produto</h2>
+      <form id="form-novo-produto" onsubmit="salvarProduto(event)">
+        <div class="form-group">
+          <label>Código SKU (ID)</label>
+          <input type="number" id="p-id" required placeholder="Ex: 1013">
+        </div>
+        <div class="form-group">
+          <label>Nome do Produto</label>
+          <input type="text" id="p-nome" required placeholder="Ex: 🥥 Água de Coco Gelada">
+        </div>
+        <div class="form-group">
+          <label>Categoria</label>
+          <select id="p-categoria" required>
+            <option value="1">Bebidas</option>
+            <option value="2">Drinks</option>
+            <option value="3">Sorvetes</option>
+            <option value="4">Comidas</option>
+            <option value="5">Salgados</option>
+            <option value="6">Lembranças</option>
+            <option value="7">Pet</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preço de Venda (R$)</label>
+          <input type="number" step="0.01" id="p-preco" required placeholder="10.00">
+        </div>
+        <div class="form-group">
+          <label>Quantidade em Estoque</label>
+          <input type="number" id="p-qtd" required placeholder="25">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+          <button type="submit" class="btn-save">Salvar Produto</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    async function carregarEstoque() {
+      try {
+        const res = await fetch('http://localhost:3001/produtos');
+        const produtos = await res.json();
+
+        const tbody = document.getElementById('tabela-produtos');
+        tbody.innerHTML = '';
+
+        let totalItens = 0;
+        let estoqueBaixoCount = 0;
+        let valorTotalEstoque = 0;
+
+        if (!produtos || produtos.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">Nenhum produto cadastrado.</td></tr>';
+          return;
+        }
+
+        produtos.forEach(prod => {
+          const qtd = Number(prod.quantidade_estoque || 0);
+          const preco = Number(prod.preco_venda || 0);
+          
+          totalItens += qtd;
+          valorTotalEstoque += (qtd * preco);
+          if (qtd < 15) estoqueBaixoCount++;
+
+          const isBaixo = qtd < 15;
+          const statusClass = isBaixo ? 'warning' : 'ok';
+          const statusText = isBaixo ? 'Baixo' : 'OK';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="product-name">${prod.nome}</td>
+            <td class="code">${prod.id_produto}</td>
+            <td><span class="tag-cat">${prod.categoria || 'Geral'}</span></td>
+            <td class="price">R$ ${preco.toFixed(2)}</td>
+            <td class="stock">${qtd}</td>
+            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+            <td>
+              <button class="btn-action edit">Editar</button>
+              <button class="btn-action delete" onclick="deletarProduto(${prod.id_produto})">Excluir</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        document.getElementById('card-skus').innerText = produtos.length;
+        document.getElementById('sub-total-skus').innerText = `${produtos.length} produtos cadastrados`;
+        document.getElementById('card-total-itens').innerText = totalItens;
+        document.getElementById('card-baixo').innerText = estoqueBaixoCount;
+        document.getElementById('card-valor-total').innerText = `R$ ${valorTotalEstoque.toFixed(2)}`;
+
+      } catch (err) {
+        console.error('Erro ao buscar estoque:', err);
+        document.getElementById('tabela-produtos').innerHTML = '<tr><td colspan="7" style="text-align: center; color: red;">Erro ao conectar com o servidor.</td></tr>';
+      }
+    }
+
+    function abrirModal() {
+      document.getElementById('modal-produto').style.display = 'flex';
+    }
+
+    function fecharModal() {
+      document.getElementById('modal-produto').style.display = 'none';
+      document.getElementById('form-novo-produto').reset();
+    }
+
+    async function salvarProduto(event) {
+      event.preventDefault();
+
+      const novoProduto = {
+        id_produto: document.getElementById('p-id').value,
+        nome: document.getElementById('p-nome').value,
+        id_categoria: document.getElementById('p-categoria').value,
+        preco_venda: document.getElementById('p-preco').value,
+        quantidade_estoque: document.getElementById('p-qtd').value
+      };
+
+      try {
+        const res = await fetch('http://localhost:3001/produtos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(novoProduto)
+        });
+
+        const data = await res.json();
+        alert(data.mensagem || data.erro);
+        fecharModal();
+        carregarEstoque(); // Atualiza a tabela na hora!
+      } catch (err) {
+        alert('Erro ao conectar com o servidor para salvar.');
+      }
+    }
+
+    async function deletarProduto(id) {
+      if (confirm(`Tem certeza que deseja excluir o produto #${id}?`)) {
+        try {
+          const res = await fetch(`http://localhost:3001/produtos/${id}`, { method: 'DELETE' });
+          const data = await res.json();
+          alert(data.mensagem || data.erro);
+          carregarEstoque();
+        } catch (err) {
+          alert('Erro ao deletar produto.');
+        }
+      }
+    }
+
+    carregarEstoque();
+  </script>
+</body>
+</html>
